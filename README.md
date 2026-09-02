@@ -27,9 +27,8 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
    | `KV_PREFIX` | Prefijo de claves Redis si varios clientes comparten el mismo KV |
    | `GHL_API_KEY` | Clave secreta para `/api/siguiente-agente` |
    | `GHL_LOCATION_ID` | ID de la subcuenta de GHL |
-   | `ADMIN_PASSWORD` | Contraseña para la vista `/admin` |
    | `AGENTES_JSON` | Array JSON de agentes: `id`, `nombre`, `email` (una sola línea) |
-   | `ADMINS_JSON` | Array JSON de supervisores: `email`, `nombre` (una sola línea) |
+   | `ADMINS_JSON` | Array JSON de supervisores: `email`, `nombre` (una sola línea). Si entran por `/toggle`, se redirigen a `/admin` |
 
    Ejemplo de `AGENTES_JSON`:
 
@@ -56,7 +55,7 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
 |------|-------------|
 | `/toggle?agente=agente1` | Pantalla móvil para que cada agente marque su disponibilidad |
 | `/toggle?email=` | Misma pantalla, identificando al agente por email |
-| `/admin` | Vista de supervisor (protegida con `ADMIN_PASSWORD` o email de `ADMINS_JSON`) |
+| `/admin` | Vista de supervisor |
 | `POST /api/toggle` | Actualiza disponibilidad de un agente |
 | `GET /api/estado` | Estado de todos los agentes |
 | `GET /api/siguiente-agente` | Round-robin para el workflow de GHL (header `x-api-key`) |

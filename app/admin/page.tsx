@@ -1,6 +1,4 @@
-import { cookies } from "next/headers";
 import { getAgenteById } from "@/lib/agentes";
-import { canAccessAdmin } from "@/lib/admin-auth";
 import {
   esHoyCostaRica,
   resolverFechaConsulta,
@@ -12,7 +10,6 @@ import {
 } from "@/lib/kv";
 import AdminAgentList from "./AdminAgentList";
 import AdminDateNav from "./AdminDateNav";
-import AdminLogin from "./AdminLogin";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -22,15 +19,9 @@ type Props = {
 };
 
 export default async function AdminPage({ searchParams }: Props) {
-  const cookieStore = cookies();
-  const session = cookieStore.get("admin_session")?.value;
   const email = searchParams.email
     ? decodeURIComponent(searchParams.email)
     : undefined;
-
-  if (!canAccessAdmin(session, email)) {
-    return <AdminLogin />;
-  }
 
   const fechaConsulta = resolverFechaConsulta(searchParams.fecha);
   const esHoy = esHoyCostaRica(fechaConsulta);
