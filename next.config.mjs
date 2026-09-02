@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
+const embedInGhl = {
+  key: "Content-Security-Policy",
+  value: "frame-ancestors *;",
+};
+
 const nextConfig = {
   async headers() {
     const noCache = [
@@ -11,18 +16,11 @@ const nextConfig = {
     return [
       {
         source: "/toggle",
-        headers: [
-          ...noCache,
-          {
-            key: "Content-Security-Policy",
-            value:
-              "frame-ancestors 'self' https://app.gohighlevel.com https://*.gohighlevel.com https://*.leadconnectorhq.com;",
-          },
-        ],
+        headers: [...noCache, embedInGhl],
       },
       {
         source: "/admin",
-        headers: noCache,
+        headers: [...noCache, embedInGhl],
       },
       {
         source: "/api/:path*",
