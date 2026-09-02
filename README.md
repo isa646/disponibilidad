@@ -24,6 +24,7 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
    | `KV_REST_API_URL` | URL REST de Upstash/Vercel KV |
    | `KV_REST_API_TOKEN` | Token de escritura |
    | `KV_REST_API_READ_ONLY_TOKEN` | Token de solo lectura |
+   | `KV_PREFIX` | Prefijo de claves Redis si varios clientes comparten el mismo KV |
    | `GHL_API_KEY` | Clave secreta para `/api/siguiente-agente` |
    | `GHL_LOCATION_ID` | ID de la subcuenta de GHL |
    | `ADMIN_PASSWORD` | Contraseña para la vista `/admin` |
