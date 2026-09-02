@@ -8,7 +8,7 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
 
 - Node.js 18+
 - Cuenta en Vercel con un store KV (Redis) configurado
-- Subcuenta de GoHighLevel (Location ID + Private Integration Token)
+- Subcuenta de GoHighLevel (Location ID)
 
 ## Configuración local
 
@@ -25,12 +25,7 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
    | `KV_REST_API_TOKEN` | Token de escritura |
    | `KV_REST_API_READ_ONLY_TOKEN` | Token de solo lectura |
    | `GHL_API_KEY` | Clave secreta para `/api/siguiente-agente` |
-   | `GHL_PRIVATE_TOKEN` | Private Integration Token con scope `conversations.readonly` (y escritura de contactos si usa el webhook) |
    | `GHL_LOCATION_ID` | ID de la subcuenta de GHL |
-   | `GHL_WEBHOOK_SECRET` | Secreto del header `X-GHL-Secret` en el webhook de asignación |
-   | `GHL_FIELD_ASIGNADO_A` | ID del custom field "Asignado a" (Settings > Custom Fields) |
-   | `GHL_FIELD_ASIGNADO_EL` | ID del custom field "Asignado el" |
-   | `GHL_FIELD_ASIGNADO_A_LAS` | ID del custom field "Asignado a las" |
    | `ADMIN_PASSWORD` | Contraseña para la vista `/admin` |
    | `AGENTES_JSON` | Array JSON de agentes: `id`, `nombre`, `email` (una sola línea) |
    | `ADMINS_JSON` | Array JSON de supervisores: `email`, `nombre` (una sola línea) |
@@ -64,7 +59,6 @@ Un deploy (Vercel + KV + variables de entorno) por cliente. El código no incluy
 | `POST /api/toggle` | Actualiza disponibilidad de un agente |
 | `GET /api/estado` | Estado de todos los agentes |
 | `GET /api/siguiente-agente` | Round-robin para el workflow de GHL (header `x-api-key`) |
-| `POST /api/ghl/asignacion-webhook` | Escribe custom fields al asignar un contacto (header `X-GHL-Secret`) |
 
 ## Integración con GoHighLevel
 
@@ -99,26 +93,12 @@ Respuesta cuando ninguno está disponible:
 { "agente": null, "disponible": false }
 ```
 
-### Webhook de custom fields
-
-Cuando GHL asigna el contacto, llame:
-
-```
-POST https://su-dominio.vercel.app/api/ghl/asignacion-webhook
-Header: X-GHL-Secret: <valor de GHL_WEBHOOK_SECRET>
-Content-Type: application/json
-
-{ "contactId": "{{contact.id}}" }
-```
-
-El endpoint lee el usuario asignado en GHL y escribe nombre, fecha y hora (zona America/Costa_Rica) en los custom fields configurados.
-
 ## Nuevo cliente (otro GHL)
 
 1. Cree un proyecto Vercel apuntando a este repositorio (no reutilice el KV de otro cliente).
 2. Vincule un store KV nuevo.
-3. Configure todas las variables de `.env.example` con los datos de esa location: token, Location ID, custom field IDs, agentes y admins.
-4. En GHL, embeba `/toggle` y cree el workflow HTTP + webhook.
+3. Configure todas las variables de `.env.example` con los datos de esa location: Location ID, agentes y admins.
+4. En GHL, embeba `/toggle` y cree el workflow HTTP.
 
 ## Despliegue en Vercel
 
